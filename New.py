@@ -19,11 +19,11 @@ w1, w2, w3, w4 = 5, 3, 1.5, 6
 # 2- Split the data into Train and Test
 X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.33, random_state=42)
 
-#  3- Initialize n_iter as the number of iterations
-#  Start with a reasonably large value and observe how the cost decreases over iterations
-#  If the cost stabilizes, stop the training early.
-#  Initialize the learning rate with any random number
-#  It's common to start with a small learning rate and increase it if the algorithm is converging too slowly
+# 3- Initialize n_iter as the number of iterations
+# Start with a reasonably large value and observe how the cost decreases over iterations
+# If the cost stabilizes, stop the training early.
+# Initialize the learning rate with any random number
+# It's common to start with a small learning rate and increase it if the algorithm is converging too slowly
 n_iterations, learning_rate = 1000, 0.3
 
 # X_b is the xTrain after adding ones for the bias term
@@ -32,6 +32,7 @@ weights = np.array([w1, w2, w3, w4])
 
 # Add a column of ones to X_train for the bias term
 X_b_train = np.column_stack((X_train, np.ones_like(X_train[:, 0])))
+
 
 # Gradient descent: W = w –[Learning_Rate(X transpose(xw-y))]
 # Loss: L(w) = 0.5 * mean((xw-y)^2)
@@ -55,11 +56,13 @@ def gradientDescent(X, Y, weights, LR, iterations):
 
     return weights, cost_history, theta_history
 
+
 # Run gradient descent
 theta, cost_history, theta_history = gradientDescent(X_b_train, y_train, weights, learning_rate, n_iterations)
 
 # Print the final weights
 print("Final Weights:", theta)
+
 
 # Implement the loss/cost function
 def costFn(weights, X, Y):
@@ -67,6 +70,7 @@ def costFn(weights, X, Y):
     errors = predictions - Y
     cost = 0.5 * np.mean(errors ** 2)
     return cost
+
 
 # Calculate the loss on the training data
 training_loss = costFn(theta, X_b_train, y_train)
@@ -78,16 +82,19 @@ X_b_test = np.column_stack((X_test, np.ones_like(X_test[:, 0])))
 # Calculate predicted output on the test data
 y_pred = np.dot(X_b_test, theta)
 
+
 # Calculate the accuracy (R-squared)
-def calculate_accuracy(actual, predicted):
-    total_variance = np.sum((actual - np.mean(actual))**2)
-    residual_variance = np.sum((actual - predicted)**2)
-    r_squared = 1 - (residual_variance / total_variance)
-    return r_squared
+def calculate_accuracy(actual_value, predicted_value):
+    mse = np.mean((actual_value - predicted_value) ** 2)
+    return mse
+
 
 # Calculate accuracy
-accuracy = calculate_accuracy(y_test, y_pred)
-print("Accuracy (R-squared):", accuracy)
+error = calculate_accuracy(y_test, y_pred)
+print("the error is (Mean Squared Error):", error)
+
+accuracy = 1 - error
+print("the model accuracy is ", accuracy)
 
 # Convergence check by comparing the last two elements of the cost history.
 # If the last cost is less than or equal to the second-to-last cost, it's considered to have converged.
